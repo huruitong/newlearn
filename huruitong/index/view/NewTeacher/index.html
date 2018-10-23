@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <title>教师</title>
+    <link rel="stylesheet" type="text/css" href="/thinkphp5/public/static/bootstrap/dist/css/bootstrap.min.css">
+</head>
+
+<body class="container">
+    <!-- 需要列出序号、姓名、性别、邮箱、用户名 -->
+    <div class="col-md-12">
+        <div class="row">
+            <table class="table table-hover table-bordered">
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>邮箱</th>
+                    <th>用户名</th>
+                    <th>操作</th>
+                </tr>
+                {volist name="teachers" id="teacher" key="key"}
+                <tr>
+                    <th>{$key}</th>
+                    <td>{$teacher->getData('name')}</td>
+                    <!-- 0为男，否则为女 -->
+                    <td>{eq name='teacher->getData("sex")' value='0'}男{else /}女{/eq}</td>
+                    <td>{$teacher->getData('email')}</td>
+                    <td>{$teacher->getData('username')}</td>
+                    <td><a href="{:url('delete?id=' . $teacher->getData('id'))}">删除</a></td>
+                </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
