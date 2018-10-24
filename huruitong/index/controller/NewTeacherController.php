@@ -19,8 +19,18 @@ class NewTeacherController extends Controller
 	
 	public function index() 
 	{
+		// 查询功能
+		$name = Request::instance()->post('name');
+		$pageSize = 5;
 		$Teacher = new NewTeacher;
-		$teachers = $Teacher->select();
+		if (!empty($name)) {
+			$Teacher->where('name', 'like', '%' . $name . '%');
+		}
+		$teachers = $Teacher->paginate($pageSize, false, [
+			'query'=>[
+				'name' => $name
+			]
+		]);
 		$this->assign('teachers',$teachers);
 		return $this->fetch();
 	}
@@ -52,7 +62,7 @@ class NewTeacherController extends Controller
 		$Teacher->name = input('post.name');
 		$Teacher->sex = input('post.sex');
 		$Teacher->username = input('post.username');
-		$Teacher->email = input('post.username');
+		$Teacher->email = input('post.email');
 		$Teacher->save();
 		return '新增id：' . $Teacher->id;
 	}
@@ -68,4 +78,32 @@ class NewTeacherController extends Controller
 		$Teacher->delete();
 		return $this->success('删除成功',url('index'));
 	}
+
+	public function updata() 
+	{
+		// 更新数据方法一
+		// $teacher = Request::instance()->post();
+		// $Teacher = new NewTeacher;
+		// if(false === $Teacher->validate(true)->isUpdata()->save($teacher)) 
+		// {
+		// 	return "更新失败";
+		// }
+		// return "更新成功" . url('index');
+		
+		// 更新数据方法二
+		$Teacher = new NewTeacher;
+		$id = Request::instance()->post('id/d');
+		$Teacher = NewTeacher::get($id);
+		if (!is_null($Teacher)) {
+			$Teacher->name = Request::instance()->post('name');
+			$Teacher->sex = Request::instance()->post('sex/d');
+			$Teacher->username = Request::instance()->post('username');
+			$Teacher->email = Request::instance()->post('email');
+			if (false === $Teacher->validate(true)->save()) {
+				return '更新失败';
+			}
+		}
+		return '更新成功';
+	}
+
 }
