@@ -27,8 +27,8 @@ class TeacherController extends IndexController
         }
 	    $teachers = $Teacher->paginate($pageSize , false , [
 	     	'query' => [
-	     	'name' => $name,
-	    ],
+	     	'name' => $name
+	    ]
 	    ]);
 	    $this->assign('teachers' , $teachers);
 	    $htmls = $this->fetch();
